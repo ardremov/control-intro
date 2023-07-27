@@ -88,7 +88,7 @@ def main():
 
     # ask user for depth
     desired_depth = float(input("Enter target depth: "))
-    pid = PID(32, 3.5, 0.0, 80)
+    pid = PID(32, 0.05, 8.0, 80) # 5, 0.0, 10.0, 100
 
     while True:
         # get pressure from the vehicle
