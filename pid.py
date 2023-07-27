@@ -43,8 +43,8 @@ class PID:
         else:
             derivative = error_derivative
 
-        # TODO: Calculate the PID output
-        output = None
+        # Calculates the PID output
+        output = self.K_p * error + self.K_i * self.integral + self.K_d * derivative
 
         self.last_error = error
 
@@ -59,9 +59,11 @@ class PID:
             float: The integral term
         """
 
-        # TODO: Calculate and return the integral term
-
-        return None
+        # Calculates and return the integral term
+        Ki = 1.0
+        error_accumulator += error * dt # dt is the time since the last update
+        integral = min(Ki * error_accumulator, 1.0)
+        return integral
 
     def _get_derivative(self, error, dt):
         """Calculate the derivative term
@@ -72,6 +74,8 @@ class PID:
             float: The derivative term
         """
 
-        # TODO: Calculate and return the derivative term
-
-        return None
+        # Calculates and return the derivative term
+        Kd = 1.0
+        derivative = Kd * (error - previous_error) / dt # dt is the time since the last update
+        previous_error = error
+        return derivative
