@@ -61,7 +61,7 @@ class PID:
 
         # Calculates and return the integral term
         Ki = 1.0
-        error_accumulator += error * dt # dt is the time since the last update
+        error_accumulator = error * dt # dt is the time since the last update
         integral = min(Ki * error_accumulator, 1.0)
         return integral
 
@@ -75,7 +75,5 @@ class PID:
         """
 
         # Calculates and return the derivative term
-        Kd = 1.0
-        derivative = Kd * (error - previous_error) / dt # dt is the time since the last update
-        previous_error = error
+        derivative = (error - self.last_error) / dt # dt is the time since the last update
         return derivative
