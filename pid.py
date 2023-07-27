@@ -58,12 +58,10 @@ class PID:
         Returns:
             float: The integral term
         """
-
         # Calculates and return the integral term
-        Ki = 1.0
-        error_accumulator = error * dt # dt is the time since the last update
-        integral = min(Ki * error_accumulator, 1.0)
-        return integral
+        self.integral += error * dt
+        self.integral = np.clip(self.integral, -self.integral_limit, self.integral_limit)
+        return self.integral
 
     def _get_derivative(self, error, dt):
         """Calculate the derivative term
@@ -73,7 +71,6 @@ class PID:
         Returns:
             float: The derivative term
         """
-
         # Calculates and return the derivative term
         derivative = (error - self.last_error) / dt # dt is the time since the last update
         return derivative
