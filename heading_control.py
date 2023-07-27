@@ -78,7 +78,7 @@ def main():
     # convert heading to radians
     desired_heading = desired_heading_deg * np.pi / 180
 
-    pid = PID(0.5, 0.0, 10.0, 100)
+    pid = PID(32, 0.05, 8.0, 80) # 5, 0.0, 10.0, 100
 
     while True:
         # get yaw from the vehicle
