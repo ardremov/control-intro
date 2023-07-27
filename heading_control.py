@@ -78,7 +78,7 @@ def main():
     # convert heading to radians
     desired_heading = desired_heading_deg * np.pi / 180
 
-    pid = PID(32, 0.05, 8.0, 80) # 5, 0.0, 10.0, 100
+    pid = PID(25, 0.0, 5.0, 80) # 5, 0.0, 10.0, 100
 
     while True:
         # get yaw from the vehicle
@@ -90,13 +90,23 @@ def main():
 
         # calculate error
         error = desired_heading - yaw
+
         print("Error: ", np.rad2deg(error))
+
+        error %= (2 * np.pi)
+
+        if (error > (np.pi / 2)) and (error < np.pi):
+            error = 1
+        elif (error < (3 * np.pi / 2)) and (error > np.pi): 
+            error = -1
+        else:
+            error = np.sin(error)
 
         output = pid.update(error, error_derivative=yaw_rate)
         print("Output: ", output)
 
         # set vertical power
-        set_rotation_power(mav, -output)
+        set_rotation_power(mav, output)
 
 
 if __name__ == "__main__":
