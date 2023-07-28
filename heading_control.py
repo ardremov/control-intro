@@ -26,7 +26,7 @@ def set_rc_channel_pwm(mav, channel_id, pwm=1500):
     )
 
 
-def set_rotation_power(mav, power=0):
+def set_rotation_power(mav, power=0, go_forward = False):
     """Set rotation power
     Args:
         power (int, optional): Power value -100-100
@@ -38,6 +38,8 @@ def set_rotation_power(mav, power=0):
     power = int(power)
 
     set_rc_channel_pwm(mav, 4, 1500 + power * 5)
+    if go_forward:
+        set_rc_channel_pwm(mav, 5, 1500 + 20 * 5)   
 
 
 def main():
@@ -92,6 +94,10 @@ def main():
         error = desired_heading - yaw
 
         print("Error: ", np.rad2deg(error))
+        go_forward = False
+        if abs(360 - np.rad2deg(error)) % 360 < 10:
+            print("going forward!")
+            go_forward = True
 
         error %= (2 * np.pi)
 
@@ -106,7 +112,7 @@ def main():
         print("Output: ", output)
 
         # set vertical power
-        set_rotation_power(mav, output)
+        set_rotation_power(mav, output, go_forward=go_forward)
 
 
 if __name__ == "__main__":
